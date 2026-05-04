@@ -1,8 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
+
   server: {
     proxy: {
       // Dev only: forward /analyze → Flask (avoids CORS in local dev)
@@ -12,6 +14,7 @@ export default defineConfig({
       },
     },
   },
+
   build: {
     outDir: "dist",
   },
