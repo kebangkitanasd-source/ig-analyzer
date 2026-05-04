@@ -1,20 +1,5 @@
 import { useRef, useState } from "react";
 
-const styles = {
-  zone: {
-    border: "2px dashed var(--border)",
-    borderRadius: "var(--radius)",
-    padding: "28px 20px",
-    textAlign: "center",
-    cursor: "pointer",
-    transition: "border-color .2s, background .2s",
-    background: "var(--surface)",
-  },
-  zoneActive: { borderColor: "var(--accent)", background: "#1f1820" },
-  label:  { fontSize: 13, color: "var(--text-muted)", marginTop: 6, display: "block" },
-  chosen: { fontSize: 13, color: "#7cfc8a", marginTop: 8 },
-};
-
 export default function FileDropZone({ label, onFile, file }) {
   const inputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
@@ -28,23 +13,30 @@ export default function FileDropZone({ label, onFile, file }) {
 
   return (
     <div
-      style={{ ...styles.zone, ...(dragging ? styles.zoneActive : {}) }}
+      className={`
+        border-2 border-dashed rounded-[var(--radius)] px-5 py-7 text-center cursor-pointer
+        transition-[border-color,background] duration-200
+        ${dragging
+          ? "border-[var(--accent)] bg-[#1f1820]"
+          : "border-[var(--border)] bg-[var(--surface)]"
+        }
+      `}
       onClick={() => inputRef.current.click()}
       onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
     >
-      <span style={{ fontSize: 28 }}>📂</span>
-      <span style={styles.label}>{label}</span>
+      <span className="text-[28px]">📂</span>
+      <span className="block text-[13px] text-[var(--text-muted)] mt-1.5">{label}</span>
       {file
-        ? <span style={styles.chosen}>✓ {file.name}</span>
-        : <span style={styles.label}>Click or drag &amp; drop</span>
+        ? <span className="block text-[13px] text-[#7cfc8a] mt-2">✓ {file.name}</span>
+        : <span className="block text-[13px] text-[var(--text-muted)] mt-2">Click or drag &amp; drop</span>
       }
       <input
         ref={inputRef}
         type="file"
         accept=".json"
-        style={{ display: "none" }}
+        className="hidden"
         onChange={(e) => e.target.files[0] && onFile(e.target.files[0])}
       />
     </div>
