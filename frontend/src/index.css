@@ -1,32 +1,45 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-:root {
-  --bg:        #0f0f11;
-  --surface:   #1a1a1f;
-  --border:    #2a2a32;
-  --accent:    #e1306c;
-  --accent2:   #833ab4;
-  --text:      #f0f0f2;
-  --text-muted:#8888a0;
-  --radius:    12px;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#080810] text-[#f0f0f8] min-h-screen;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 15% 0%, rgba(168,85,247,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 35% at 85% 100%, rgba(247,64,110,0.08) 0%, transparent 60%);
+  }
+  * { box-sizing: border-box; }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full; }
 }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.5;
+@layer components {
+  .ig-grad { background: linear-gradient(135deg, #f7406e, #a855f7); }
+  .ig-grad-text {
+    background: linear-gradient(90deg, #f7406e, #a855f7, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .surface { @apply bg-white/[0.04] border border-white/[0.08] rounded-2xl; }
+  .btn-primary {
+    @apply w-full py-4 rounded-xl font-bold text-white text-[15px] transition-all duration-300;
+    background: linear-gradient(135deg, #f7406e, #a855f7);
+    box-shadow: 0 0 28px rgba(247,64,110,0.3);
+  }
+  .btn-primary:hover { @apply opacity-90 -translate-y-0.5; }
+  .btn-primary:disabled {
+    @apply opacity-30 cursor-not-allowed translate-y-0;
+    background: rgba(255,255,255,0.06);
+    box-shadow: none;
+  }
+  .btn-ghost {
+    @apply bg-white/[0.04] border border-white/[0.08] text-[#a0a0c0] rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200;
+  }
+  .btn-ghost:hover { @apply bg-white/[0.07] border-white/[0.15]; }
 }
-
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: var(--radius);
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: opacity .2s;
-}
-button:hover { opacity: .85; }
-button:disabled { opacity: .4; cursor: not-allowed; }

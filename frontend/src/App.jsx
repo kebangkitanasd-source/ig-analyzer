@@ -5,50 +5,20 @@ import StatCard from "./components/StatCard";
 import UserTable from "./components/UserTable";
 
 const TABS = [
-  { key: "tidak_folbek",             label: "Tidak Folbek" },
-  { key: "mutualan",                 label: "Mutualan" },
-  { key: "follow_6bln",              label: "Follow 6 Bulan" },
-  { key: "follow_6bln_tidak_folbek", label: "6 Bln & Tdk Folbek" },
+  { key: "tidak_folbek",             label: "Tidak Folbek",        emoji: "👻" },
+  { key: "mutualan",                 label: "Mutualan",            emoji: "🤝" },
+  { key: "follow_6bln",              label: "Follow 6 Bulan",      emoji: "📅" },
+  { key: "follow_6bln_tidak_folbek", label: "6 Bln & Tdk Folbek",  emoji: "⚠️" },
 ];
-
-const s = {
-  app:     { maxWidth: 900, margin: "0 auto", padding: "40px 20px" },
-  heading: { fontSize: 28, fontWeight: 800, marginBottom: 6,
-             background: "linear-gradient(90deg,#e1306c,#833ab4)",
-             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" },
-  sub:     { color: "var(--text-muted)", marginBottom: 36, fontSize: 14 },
-  grid:    { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 },
-  btn:     { background: "linear-gradient(135deg,#e1306c,#833ab4)",
-             color: "#fff", width: "100%", padding: "14px", fontSize: 15,
-             marginTop: 8 },
-  error:   { background: "#3a1020", border: "1px solid #e1306c",
-             borderRadius: 8, padding: "12px 16px", color: "#f88",
-             marginTop: 12, fontSize: 14 },
-  stats:   { display: "flex", flexWrap: "wrap", gap: 12, margin: "28px 0" },
-  tabs:    { display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 },
-  tab:     (active) => ({
-             padding: "8px 16px", borderRadius: 8, fontSize: 13, fontWeight: 600,
-             background: active ? "linear-gradient(135deg,#e1306c,#833ab4)" : "var(--surface)",
-             color: active ? "#fff" : "var(--text-muted)",
-             border: "1px solid var(--border)",
-           }),
-  section: { background: "var(--surface)", border: "1px solid var(--border)",
-             borderRadius: "var(--radius)", padding: 20 },
-  search:  { width: "100%", padding: "10px 14px", borderRadius: 8, fontSize: 14,
-             background: "var(--bg)", border: "1px solid var(--border)",
-             color: "var(--text)", outline: "none", marginBottom: 12 },
-  resetBtn:{ background: "var(--surface)", color: "var(--text-muted)",
-             border: "1px solid var(--border)", marginTop: 24 },
-};
 
 export default function App() {
   const [followingFile, setFollowingFile] = useState(null);
   const [followersFile, setFollowersFile] = useState(null);
-  const [loading,  setLoading]  = useState(false);
-  const [error,    setError]    = useState("");
-  const [result,   setResult]   = useState(null);
+  const [loading,   setLoading]   = useState(false);
+  const [error,     setError]     = useState("");
+  const [result,    setResult]    = useState(null);
   const [activeTab, setActiveTab] = useState("tidak_folbek");
-  const [search,   setSearch]   = useState("");
+  const [search,    setSearch]    = useState("");
 
   const canAnalyze = followingFile && followersFile && !loading;
 
@@ -76,7 +46,6 @@ export default function App() {
     setSearch("");
   };
 
-  // Filtered rows for active tab
   const rows = result
     ? (search
         ? result[activeTab].filter(r => r.username.toLowerCase().includes(search.toLowerCase()))
@@ -84,38 +53,58 @@ export default function App() {
     : [];
 
   return (
-    <div style={s.app}>
-      <h1 style={s.heading}>IG Analyzer</h1>
-      <p style={s.sub}>Upload your Instagram JSON exports to analyze followers &amp; following.</p>
+    <div className="max-w-[860px] mx-auto px-6 py-14">
+
+      {/* ── Header ── */}
+      <div className="mb-12">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-xl ig-grad flex items-center justify-center text-xl"
+            style={{ boxShadow: "0 0 22px rgba(247,64,110,0.4)" }}>
+            📊
+          </div>
+          <h1 className="text-3xl font-extrabold leading-none ig-grad-text">IG Analyzer</h1>
+        </div>
+        <p className="text-sm text-[#a0a0c0] max-w-md">
+          Upload file JSON ekspor Instagram kamu untuk menganalisis followers & following.
+        </p>
+      </div>
 
       {!result ? (
-        /* ── Upload Section ── */
-        <div>
-          <div style={s.grid}>
-            <FileDropZone
-              label="following.json"
-              file={followingFile}
-              onFile={setFollowingFile}
-            />
-            <FileDropZone
-              label="followers_1.json"
-              file={followersFile}
-              onFile={setFollowersFile}
-            />
+        /* ── Upload ── */
+        <div className="space-y-4">
+          <div className="surface p-6">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#606080] mb-4">
+              Upload File
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <FileDropZone label="following.json"   file={followingFile} onFile={setFollowingFile} />
+              <FileDropZone label="followers_1.json" file={followersFile} onFile={setFollowersFile} />
+            </div>
           </div>
 
-          <button style={s.btn} onClick={handleAnalyze} disabled={!canAnalyze}>
-            {loading ? "Menganalisis…" : "🔍 Analisis Sekarang"}
+          <button className="btn-primary" onClick={handleAnalyze} disabled={!canAnalyze}>
+            {loading ? "⏳ Menganalisis…" : "🔍 Analisis Sekarang"}
           </button>
 
-          {error && <div style={s.error}>⚠ {error}</div>}
+          <div className="rounded-xl border border-[#3b82f6]/20 bg-[#3b82f6]/[0.06] px-4 py-3 text-sm text-[#a0a0c0]">
+            💡 <span className="font-bold text-[#3b82f6]">Cara download:</span>{" "}
+            Instagram → Pengaturan → Aktivitas → Download info → Format JSON.
+          </div>
+
+          {error && (
+            <div className="rounded-xl border border-[#f7406e]/25 bg-[#f7406e]/[0.07] px-4 py-3 text-sm text-[#f7406e]">
+              ⚠ {error}
+            </div>
+          )}
         </div>
+
       ) : (
-        /* ── Results Section ── */
-        <div>
-          {/* Stats */}
-          <div style={s.stats}>
-            <StatCard label="Following"          value={result.stats.following_total} />
+        /* ── Results ── */
+        <div className="space-y-5">
+
+          {/* Stat cards */}
+          <div className="flex flex-wrap gap-3">
+            <StatCard label="Following"           value={result.stats.following_total} />
             <StatCard label="Followers"           value={result.stats.followers_total} />
             <StatCard label="Tidak Folbek"        value={result.stats.tidak_folbek} />
             <StatCard label="Mutualan"            value={result.stats.mutualan} />
@@ -124,30 +113,57 @@ export default function App() {
           </div>
 
           {/* Tabs */}
-          <div style={s.tabs}>
-            {TABS.map(t => (
-              <button
-                key={t.key}
-                style={s.tab(activeTab === t.key)}
-                onClick={() => { setActiveTab(t.key); setSearch(""); }}
-              >
-                {t.label} ({result[t.key].length})
-              </button>
-            ))}
+          <div className="flex gap-2 flex-wrap">
+            {TABS.map(t => {
+              const active = activeTab === t.key;
+              return (
+                <button
+                  key={t.key}
+                  onClick={() => { setActiveTab(t.key); setSearch(""); }}
+                  className={`
+                    px-4 py-2 rounded-full text-[13px] font-bold border transition-all duration-200
+                    ${active
+                      ? "text-white border-transparent"
+                      : "bg-white/[0.04] border-white/[0.08] text-[#a0a0c0] hover:bg-white/[0.07] hover:border-white/20"}
+                  `}
+                  style={active ? {
+                    background: "linear-gradient(135deg,#f7406e,#a855f7)",
+                    boxShadow: "0 0 16px rgba(247,64,110,0.3)",
+                  } : {}}
+                >
+                  {t.emoji} {t.label}
+                  <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] ${active ? "bg-white/20" : "bg-white/[0.07]"}`}>
+                    {result[t.key].length}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Table with search */}
-          <div style={s.section}>
-            <input
-              style={s.search}
-              placeholder="Cari username…"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
+          {/* Table card */}
+          <div className="surface overflow-hidden">
+            {/* Search */}
+            <div className="px-5 py-4 border-b border-white/[0.06]">
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#606080]">🔍</span>
+                <input
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#f0f0f8] placeholder-[#606080] outline-none focus:border-[#a855f7]/40 transition-colors duration-150"
+                  placeholder="Cari username…"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Count */}
+            <div className="px-5 py-2 border-b border-white/[0.04] text-[11px] text-[#606080]">
+              Menampilkan <span className="font-bold text-[#a0a0c0]">{rows.length}</span> akun
+            </div>
+
             <UserTable rows={rows} />
           </div>
 
-          <button style={s.resetBtn} onClick={handleReset}>↩ Analisis Ulang</button>
+          <button className="btn-ghost" onClick={handleReset}>↩ Analisis Ulang</button>
         </div>
       )}
     </div>
