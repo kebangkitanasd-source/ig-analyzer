@@ -7,7 +7,7 @@ import UserTable from "./components/UserTable";
 // ─── GANTI FOTO PROFIL HP ───────────────────────────────────────────────────
 // Letakkan file di: frontend/public/avatar.jpg  (atau .png)
 // Ganti null di bawah jadi: "/avatar.jpg"
-const PROFILE_IMAGE = null;
+const PROFILE_IMAGE = "/avatar.jpg";
 // ───────────────────────────────────────────────────────────────────────────
 
 const TABS = [
