@@ -1,57 +1,51 @@
-const PALETTE = [
-  { accent: "#00CFFF", glow: "rgba(0,207,255,0.3)",   bg: "rgba(0,207,255,0.05)",  border: "rgba(0,207,255,0.2)"  },
-  { accent: "#7B2CFF", glow: "rgba(123,44,255,0.3)",  bg: "rgba(123,44,255,0.06)", border: "rgba(123,44,255,0.25)" },
-  { accent: "#38B6FF", glow: "rgba(56,182,255,0.3)",  bg: "rgba(56,182,255,0.05)", border: "rgba(56,182,255,0.2)"  },
-  { accent: "#00FF8C", glow: "rgba(0,255,140,0.3)",   bg: "rgba(0,255,140,0.05)",  border: "rgba(0,255,140,0.2)"  },
-  { accent: "#7B2CFF", glow: "rgba(123,44,255,0.25)", bg: "rgba(123,44,255,0.05)", border: "rgba(123,44,255,0.2)"  },
-  { accent: "#00CFFF", glow: "rgba(0,207,255,0.25)",  bg: "rgba(0,207,255,0.04)",  border: "rgba(0,207,255,0.15)" },
+const ACCENTS = [
+  { color: "#0071e3", bg: "rgba(0,113,227,0.08)",   border: "rgba(0,113,227,0.15)"   },
+  { color: "#34c759", bg: "rgba(52,199,89,0.08)",   border: "rgba(52,199,89,0.15)"   },
+  { color: "#ff9500", bg: "rgba(255,149,0,0.08)",   border: "rgba(255,149,0,0.15)"   },
+  { color: "#af52de", bg: "rgba(175,82,222,0.08)",  border: "rgba(175,82,222,0.15)"  },
+  { color: "#ff2d55", bg: "rgba(255,45,85,0.08)",   border: "rgba(255,45,85,0.15)"   },
+  { color: "#5ac8fa", bg: "rgba(90,200,250,0.08)",  border: "rgba(90,200,250,0.15)"  },
 ];
 
 const colorMap = new Map();
 let idx = 0;
-function getColor(label) {
-  if (!colorMap.has(label)) colorMap.set(label, PALETTE[idx++ % PALETTE.length]);
+function getAccent(label) {
+  if (!colorMap.has(label)) colorMap.set(label, ACCENTS[idx++ % ACCENTS.length]);
   return colorMap.get(label);
 }
 
 export default function StatCard({ label, value }) {
-  const c = getColor(label);
+  const a = getAccent(label);
   return (
     <div
-      className="flex-1 min-w-[130px] rounded-xl px-4 py-3.5 relative overflow-hidden transition-all duration-300"
+      className="flex-1 min-w-[130px] rounded-2xl px-4 py-4 transition-all duration-200 cursor-default"
       style={{
-        background: c.bg,
-        border: `1px solid ${c.border}`,
-        boxShadow: `0 0 20px ${c.glow}, inset 0 0 30px rgba(0,0,0,0.3)`,
+        background: "var(--bg-card)",
+        border: "1px solid var(--border)",
+        backdropFilter: "var(--blur)",
+        WebkitBackdropFilter: "var(--blur)",
+        boxShadow: "var(--shadow-sm)",
       }}
+      onMouseEnter={e => { e.currentTarget.style.boxShadow = "var(--shadow-md)"; e.currentTarget.style.borderColor = "var(--border-strong)"; }}
+      onMouseLeave={e => { e.currentTarget.style.boxShadow = "var(--shadow-sm)"; e.currentTarget.style.borderColor = "var(--border)"; }}
     >
-      {/* corner decoration */}
-      <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none"
-        style={{ background: `radial-gradient(circle at top right, ${c.glow}, transparent 70%)` }} />
-
-      {/* top bracket */}
-      <div className="absolute top-0 left-0 w-3 h-3 pointer-events-none"
-        style={{ borderTop: `1px solid ${c.accent}`, borderLeft: `1px solid ${c.accent}`, opacity: 0.6 }} />
-      <div className="absolute bottom-0 right-0 w-3 h-3 pointer-events-none"
-        style={{ borderBottom: `1px solid ${c.accent}`, borderRight: `1px solid ${c.accent}`, opacity: 0.6 }} />
+      {/* colored dot indicator */}
+      <div className="flex items-center gap-2 mb-2.5">
+        <div
+          className="w-2 h-2 rounded-full shrink-0"
+          style={{ background: a.color }}
+        />
+        <p
+          className="text-[11px] font-semibold uppercase tracking-wider truncate"
+          style={{ color: "var(--text-secondary)", letterSpacing: "0.05em" }}
+        >
+          {label}
+        </p>
+      </div>
 
       <p
-        className="text-[9px] font-bold uppercase tracking-widest mb-2"
-        style={{
-          fontFamily: "'JetBrains Mono', monospace",
-          color: c.accent,
-          textShadow: `0 0 8px ${c.glow}`,
-        }}
-      >
-        {label}
-      </p>
-      <p
-        className="text-3xl font-black leading-none"
-        style={{
-          fontFamily: "'Orbitron', monospace",
-          color: c.accent,
-          textShadow: `0 0 12px ${c.glow}, 0 0 24px ${c.glow}`,
-        }}
+        className="text-3xl font-bold leading-none tracking-tight"
+        style={{ color: a.color }}
       >
         {value?.toLocaleString("id-ID") ?? "—"}
       </p>
