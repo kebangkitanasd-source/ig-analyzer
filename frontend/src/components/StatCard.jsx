@@ -1,10 +1,10 @@
 const PALETTE = [
-  { bg: "bg-[#f7406e]/10", border: "border-[#f7406e]/20", text: "text-[#f7406e]" },
-  { bg: "bg-[#a855f7]/10", border: "border-[#a855f7]/20", text: "text-[#a855f7]" },
-  { bg: "bg-[#3b82f6]/10", border: "border-[#3b82f6]/20", text: "text-[#3b82f6]" },
-  { bg: "bg-[#22c55e]/10", border: "border-[#22c55e]/20", text: "text-[#22c55e]" },
-  { bg: "bg-[#f97316]/10", border: "border-[#f97316]/20", text: "text-[#f97316]" },
-  { bg: "bg-[#ec4899]/10", border: "border-[#ec4899]/20", text: "text-[#ec4899]" },
+  { accent: "#00CFFF", glow: "rgba(0,207,255,0.3)",   bg: "rgba(0,207,255,0.05)",  border: "rgba(0,207,255,0.2)"  },
+  { accent: "#7B2CFF", glow: "rgba(123,44,255,0.3)",  bg: "rgba(123,44,255,0.06)", border: "rgba(123,44,255,0.25)" },
+  { accent: "#38B6FF", glow: "rgba(56,182,255,0.3)",  bg: "rgba(56,182,255,0.05)", border: "rgba(56,182,255,0.2)"  },
+  { accent: "#00FF8C", glow: "rgba(0,255,140,0.3)",   bg: "rgba(0,255,140,0.05)",  border: "rgba(0,255,140,0.2)"  },
+  { accent: "#7B2CFF", glow: "rgba(123,44,255,0.25)", bg: "rgba(123,44,255,0.05)", border: "rgba(123,44,255,0.2)"  },
+  { accent: "#00CFFF", glow: "rgba(0,207,255,0.25)",  bg: "rgba(0,207,255,0.04)",  border: "rgba(0,207,255,0.15)" },
 ];
 
 const colorMap = new Map();
@@ -17,10 +17,44 @@ function getColor(label) {
 export default function StatCard({ label, value }) {
   const c = getColor(label);
   return (
-    <div className={`flex-1 min-w-[130px] rounded-xl border px-4 py-3.5 relative overflow-hidden ${c.bg} ${c.border}`}>
-      <div className={`absolute -top-4 -right-4 w-14 h-14 rounded-full opacity-40 ${c.bg}`} />
-      <p className={`text-[10px] font-bold uppercase tracking-widest mb-1.5 ${c.text}`}>{label}</p>
-      <p className={`text-3xl font-extrabold leading-none ${c.text}`}>{value?.toLocaleString("id-ID") ?? "—"}</p>
+    <div
+      className="flex-1 min-w-[130px] rounded-xl px-4 py-3.5 relative overflow-hidden transition-all duration-300"
+      style={{
+        background: c.bg,
+        border: `1px solid ${c.border}`,
+        boxShadow: `0 0 20px ${c.glow}, inset 0 0 30px rgba(0,0,0,0.3)`,
+      }}
+    >
+      {/* corner decoration */}
+      <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none"
+        style={{ background: `radial-gradient(circle at top right, ${c.glow}, transparent 70%)` }} />
+
+      {/* top bracket */}
+      <div className="absolute top-0 left-0 w-3 h-3 pointer-events-none"
+        style={{ borderTop: `1px solid ${c.accent}`, borderLeft: `1px solid ${c.accent}`, opacity: 0.6 }} />
+      <div className="absolute bottom-0 right-0 w-3 h-3 pointer-events-none"
+        style={{ borderBottom: `1px solid ${c.accent}`, borderRight: `1px solid ${c.accent}`, opacity: 0.6 }} />
+
+      <p
+        className="text-[9px] font-bold uppercase tracking-widest mb-2"
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          color: c.accent,
+          textShadow: `0 0 8px ${c.glow}`,
+        }}
+      >
+        {label}
+      </p>
+      <p
+        className="text-3xl font-black leading-none"
+        style={{
+          fontFamily: "'Orbitron', monospace",
+          color: c.accent,
+          textShadow: `0 0 12px ${c.glow}, 0 0 24px ${c.glow}`,
+        }}
+      >
+        {value?.toLocaleString("id-ID") ?? "—"}
+      </p>
     </div>
   );
 }
