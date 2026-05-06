@@ -340,7 +340,7 @@ function PhoneMockup({ dark }) {
   ];
 
   return (
-    <div className="relative flex-shrink-0" style={{ width: 210 }}>
+    <div className="relative flex-shrink-0" style={{ width: 240 }}>
       <div className="absolute pointer-events-none" style={{
         inset: "-30px",
         background: dark
@@ -350,8 +350,8 @@ function PhoneMockup({ dark }) {
 
       {/* frame */}
       <div style={{
-        width: 210,
-        height: 455,
+        width: 240,
+        height: 520,
         borderRadius: 50,
         background: phoneBg,
         padding: 3,
@@ -668,7 +668,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
 
-      <div className="w-full max-w-[1060px] mx-auto px-6 pt-8 pb-6 flex-1">
+      <div className="w-full px-10 pt-8 pb-6 flex-1" style={{ maxWidth: "100%" }}>
 
         {/* ── NAVBAR ── */}
         <nav className="flex items-center justify-between mb-12">
@@ -696,7 +696,7 @@ export default function App() {
 
         {!result ? (
           /* ── UPLOAD VIEW ── */
-          <div className="flex gap-12 items-start">
+          <div className="flex gap-16 items-start">
 
             {/* LEFT — phone */}
             <PhoneMockup dark={dark} />
@@ -718,7 +718,7 @@ export default function App() {
                 <h1
                   className="font-black leading-[1.05] tracking-tight mb-4"
                   style={{
-                    fontSize: 44,
+                    fontSize: 52,
                     color: "var(--text-primary)",
                     letterSpacing: "-0.03em",
                     lineHeight: 1.08,
