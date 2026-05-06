@@ -303,281 +303,324 @@ function HamburgerMenu() {
 
 /* ── PHONE MOCKUP ── */
 function PhoneMockup({ dark }) {
-  const [liked, setLiked] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [tab,   setTab]   = useState("grid");
+  const [tab, setTab] = useState("grid");
 
-  const phoneBg   = dark ? "#1c1c1e" : "#f2f2f7";
-  const screenBg  = dark ? "#000000" : "#ffffff";
-  const textMain  = dark ? "#f5f5f7" : "#1d1d1f";
-  const textSub   = dark ? "#636366" : "#aeaeb2";
-  const divider   = dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
-  const accentCol = dark ? "#2997ff" : "#0071e3";
+  const phoneBg  = dark ? "#1c1c1e" : "#e8e8ed";
+  const screenBg = dark ? "#000000" : "#ffffff";
+  const textMain = dark ? "#f5f5f7" : "#1d1d1f";
+  const textSub  = dark ? "#636366" : "#8e8e93";
+  const divider  = dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)";
+  const igGrad   = "linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)";
 
   const gridTiles = [
-    dark ? "#1a2535" : "#e8f4ff",
-    dark ? "#1a1a2e" : "#f0e8ff",
-    dark ? "#1e2a1e" : "#e8ffe8",
-    dark ? "#2a1a1a" : "#ffe8e8",
-    dark ? "#2a2018" : "#fff3e0",
-    dark ? "#1a2a2a" : "#e0f7fa",
+    { bg: dark?"#1a2535":"#dbeafe" },
+    { bg: dark?"#1e1a2e":"#ede9fe" },
+    { bg: dark?"#1e2a1e":"#dcfce7" },
+    { bg: dark?"#2a1a1a":"#fee2e2" },
+    { bg: dark?"#2a2018":"#fef3c7" },
+    { bg: dark?"#1a2a2a":"#cffafe" },
+    { bg: dark?"#221a2a":"#fce7f3" },
+    { bg: dark?"#1a1e2a":"#e0e7ff" },
+    { bg: dark?"#1e251e":"#d1fae5" },
   ];
+
+  // SVG navbar icons (Instagram-accurate outlines)
+  const NavIcon = ({ type, active }) => {
+    const c = active ? textMain : textSub;
+    const sw = active ? 2 : 1.5;
+    if (type === "home") return (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill={active?"currentColor":"none"} stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" style={{ color: c }}>
+        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/>
+        <path d="M9 21V12h6v9" fill="none" stroke="currentColor" strokeWidth={sw}/>
+      </svg>
+    );
+    if (type === "search") return (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" style={{ color: c }}>
+        <circle cx="11" cy="11" r="7"/>
+        <path d="M16.5 16.5L21 21"/>
+      </svg>
+    );
+    if (type === "plus") return (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" style={{ color: c }}>
+        <rect x="3" y="3" width="18" height="18" rx="4"/>
+        <path d="M12 8v8M8 12h8"/>
+      </svg>
+    );
+    if (type === "reels") return (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill={active?"currentColor":"none"} stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" style={{ color: c }}>
+        <rect x="2" y="2" width="20" height="20" rx="4"/>
+        <circle cx="12" cy="12" r="3.5" fill={active?"white":"none"} stroke={active?"white":c} strokeWidth={active?0:sw}/>
+        <path d="M2 8h20M2 16h20M8 2v5M16 2v5M8 17v5M16 17v5" strokeWidth="1"/>
+      </svg>
+    );
+    if (type === "profile") return (
+      <div style={{ width: 20, height: 20, borderRadius: "50%", border: active ? `2px solid ${textMain}` : `1.5px solid ${textSub}`, overflow: "hidden", flexShrink: 0 }}>
+        {PROFILE_IMAGE
+          ? <img src={PROFILE_IMAGE} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          : <div style={{ width: "100%", height: "100%", background: dark ? "#2c2c2e" : "#e5e5ea" }} />}
+      </div>
+    );
+    return null;
+  };
+
+  // Profile content tab icons
+  const TabIcon = ({ type, active }) => {
+    const c = active ? textMain : textSub;
+    if (type === "grid") return (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill={active?"currentColor":"none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: c }}>
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+    );
+    if (type === "reels") return (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ color: c }}>
+        <rect x="2" y="2" width="20" height="20" rx="4"/>
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M2 8h20M8 2v5M16 2v5" strokeWidth="1.5"/>
+      </svg>
+    );
+    if (type === "tagged") return (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: c }}>
+        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+        <circle cx="7" cy="7" r="1.5" fill="currentColor"/>
+      </svg>
+    );
+    return null;
+  };
 
   return (
     <div className="relative flex-shrink-0" style={{ width: 240 }}>
+      {/* ambient glow */}
       <div className="absolute pointer-events-none" style={{
         inset: "-30px",
         background: dark
-          ? "radial-gradient(ellipse at 50% 40%, rgba(41,151,255,0.06), transparent 65%)"
-          : "radial-gradient(ellipse at 50% 40%, rgba(0,113,227,0.06), transparent 65%)",
+          ? "radial-gradient(ellipse at 50% 40%, rgba(41,151,255,0.05), transparent 65%)"
+          : "radial-gradient(ellipse at 50% 40%, rgba(0,113,227,0.05), transparent 65%)",
       }} />
 
-      {/* frame */}
+      {/* phone frame */}
       <div style={{
-        width: 240,
-        height: 520,
+        width: 240, height: 520,
         borderRadius: 50,
         background: phoneBg,
         padding: 3,
         boxShadow: dark
-          ? "0 0 0 1px rgba(255,255,255,0.08), 0 40px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.08)"
-          : "0 0 0 1px rgba(0,0,0,0.1), 0 40px 80px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8)",
+          ? "0 0 0 1px rgba(255,255,255,0.08), 0 32px 80px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.08)"
+          : "0 0 0 1px rgba(0,0,0,0.12), 0 32px 80px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
         position: "relative",
       }}>
         {/* side buttons */}
         {[
-          { side: "left",  top: 95, h: 26 },
-          { side: "left",  top: 135, h: 42 },
-          { side: "left",  top: 185, h: 42 },
-          { side: "right", top: 145, h: 58 },
+          { side:"left",  top:90,  h:24 },
+          { side:"left",  top:128, h:40 },
+          { side:"left",  top:176, h:40 },
+          { side:"right", top:138, h:56 },
         ].map((b, i) => (
           <div key={i} style={{
-            position: "absolute",
-            [b.side]: -3.5,
-            top: b.top,
-            width: 3.5,
-            height: b.h,
-            borderRadius: b.side === "left" ? "4px 0 0 4px" : "0 4px 4px 0",
+            position:"absolute", [b.side]:-3.5, top:b.top,
+            width:3.5, height:b.h,
+            borderRadius: b.side==="left" ? "4px 0 0 4px" : "0 4px 4px 0",
             background: phoneBg,
           }} />
         ))}
 
         {/* screen */}
         <div style={{
-          width: "100%", height: "100%",
-          borderRadius: 48,
-          background: screenBg,
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
+          width:"100%", height:"100%",
+          borderRadius:48, background:screenBg,
+          overflow:"hidden", display:"flex", flexDirection:"column",
         }}>
-          {/* status bar */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "13px 18px 3px", flexShrink: 0 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, color: textMain, fontFamily: "'-apple-system', sans-serif" }}>9:41</span>
+
+          {/* ── STATUS BAR ── */}
+          <div style={{ position:"relative", display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 16px 2px", flexShrink:0 }}>
+            <span style={{ fontSize:8.5, fontWeight:700, color:textMain }}>9:41</span>
+            {/* dynamic island */}
             <div style={{
-              width: 100, height: 26, borderRadius: 20,
-              background: dark ? "#000" : "#1d1d1f",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
-              boxShadow: `0 0 0 3px ${screenBg}`,
-              position: "absolute", left: "50%", transform: "translateX(-50%)", top: 8,
-            }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: dark ? "#111" : "#222" }} />
-              <div style={{ width: 5, height: 5, borderRadius: "50%", background: accentCol, opacity: 0.8 }} />
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-              <div style={{ display: "flex", alignItems: "flex-end", gap: 1 }}>
-                {[5,7,9,11].map((h, i) => (
-                  <div key={i} style={{ width: 2, height: h, borderRadius: 1, background: i < 3 ? textMain : textSub }} />
+              position:"absolute", left:"50%", top:9, transform:"translateX(-50%)",
+              width:90, height:24, borderRadius:20,
+              background: dark?"#000":"#1d1d1f",
+              boxShadow:`0 0 0 3px ${screenBg}`,
+            }}/>
+            <div style={{ display:"flex", alignItems:"center", gap:3.5 }}>
+              {/* signal bars */}
+              <div style={{ display:"flex", alignItems:"flex-end", gap:1 }}>
+                {[4,6,8,10].map((h,i)=>(
+                  <div key={i} style={{ width:1.8, height:h, borderRadius:1, background: i<3?textMain:textSub }}/>
                 ))}
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <div style={{ width: 17, height: 8.5, borderRadius: 2.5, border: `1px solid ${textSub}`, padding: 1.5, display: "flex", alignItems: "center" }}>
-                  <div style={{ width: "80%", height: "100%", borderRadius: 1, background: textMain }} />
+              {/* wifi */}
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" style={{ color:textMain }}>
+                <path d="M1 3a5.5 5.5 0 0 1 8 0" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                <path d="M2.5 4.8a3 3 0 0 1 5 0" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                <circle cx="5" cy="7" r="0.8" fill="currentColor"/>
+              </svg>
+              {/* battery */}
+              <div style={{ display:"flex", alignItems:"center", gap:1 }}>
+                <div style={{ width:16, height:8, borderRadius:2.5, border:`1px solid ${textSub}`, padding:1.2, display:"flex", alignItems:"center" }}>
+                  <div style={{ width:"78%", height:"100%", borderRadius:1, background:textMain }}/>
                 </div>
-                <div style={{ width: 1.5, height: 3.5, borderRadius: 1, background: textSub }} />
+                <div style={{ width:1.5, height:3.5, borderRadius:1, background:textSub }}/>
               </div>
             </div>
           </div>
 
-          {/* IG topbar */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "4px 14px 6px", flexShrink: 0 }}>
-            <span style={{ fontSize: 12, fontWeight: 800, color: textMain, letterSpacing: "-0.5px" }}>ptrgama_</span>
-            <div style={{ display: "flex", gap: 12 }}>
-              {["+", "✉"].map((ic, i) => (
-                <span key={i} style={{ fontSize: 14, color: textMain, fontWeight: 300 }}>{ic}</span>
-              ))}
+          {/* ── IG TOPBAR ── */}
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"2px 14px 8px", flexShrink:0 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+              {/* lock icon */}
+              <svg width="8" height="9" viewBox="0 0 8 9" fill="none" style={{ color:textMain }}>
+                <rect x="1" y="4" width="6" height="5" rx="1" fill="currentColor"/>
+                <path d="M2.5 4V2.8a1.5 1.5 0 0 1 3 0V4" stroke="currentColor" strokeWidth="1" fill="none"/>
+              </svg>
+              <span style={{ fontSize:11.5, fontWeight:700, color:textMain, letterSpacing:"-0.3px" }}>ptrgama_</span>
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" style={{ color:textSub }}>
+                <path d="M2 3l2 2 2-2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div style={{ display:"flex", gap:13, alignItems:"center" }}>
+              {/* add person */}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={textMain} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3"/><path d="M19 17c0-2-1.34-3-3-3"/>
+                <circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.69-5 6-5s6 2 6 5"/>
+                <path d="M20 12v6M17 15h6" strokeWidth="1.8"/>
+              </svg>
+              {/* menu lines */}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={textMain} strokeWidth="2" strokeLinecap="round">
+                <path d="M3 12h18M3 6h18M3 18h18"/>
+              </svg>
             </div>
           </div>
 
-          {/* scroll area */}
-          <div style={{ flex: 1, overflowY: "hidden", display: "flex", flexDirection: "column" }}>
-
-            {/* stories */}
-            <div style={{ display: "flex", gap: 8, padding: "4px 12px 10px", overflowX: "hidden", flexShrink: 0 }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, flexShrink: 0 }}>
-                <div style={{
-                  width: 42, height: 42, borderRadius: "50%",
-                  border: `1px solid ${divider}`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  position: "relative", overflow: "visible",
-                }}>
+          {/* ── PROFILE HEADER ── */}
+          <div style={{ padding:"0 14px 8px", flexShrink:0 }}>
+            {/* avatar + stats row */}
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:9 }}>
+              {/* avatar */}
+              <div style={{
+                width:60, height:60, borderRadius:"50%", padding:2.5,
+                background: igGrad, flexShrink:0,
+              }}>
+                <div style={{ width:"100%", height:"100%", borderRadius:"50%", border:`2px solid ${screenBg}`, overflow:"hidden" }}>
                   {PROFILE_IMAGE
-                    ? <img src={PROFILE_IMAGE} alt="me" style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }} />
-                    : <span style={{ fontSize: 14 }}>👤</span>}
-                  <div style={{ position: "absolute", bottom: -1, right: -1, width: 13, height: 13, borderRadius: "50%", background: accentCol, border: `1.5px solid ${screenBg}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <span style={{ color: "#fff", fontSize: 9, fontWeight: 900, lineHeight: 1 }}>+</span>
-                  </div>
+                    ? <img src={PROFILE_IMAGE} alt="profile" style={{ width:"100%", height:"100%", objectFit:"cover" }}/>
+                    : <div style={{ width:"100%", height:"100%", background: dark?"#2c2c2e":"#e5e5ea", display:"flex", alignItems:"center", justifyContent:"center", fontSize:22 }}>👤</div>}
                 </div>
-                <span style={{ fontSize: 7, color: textSub }}>You</span>
               </div>
-              {["ax","rz","ni","dt"].map((name, i) => (
-                <div key={name} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, flexShrink: 0 }}>
+              {/* stats */}
+              <div style={{ display:"flex", flex:1, justifyContent:"space-around" }}>
+                {[["0","Postingan"],["666","Pengikut"],["1","Mengikuti"]].map(([v,l])=>(
+                  <div key={l} style={{ textAlign:"center" }}>
+                    <div style={{ fontSize:12, fontWeight:700, color:textMain, letterSpacing:"-0.5px" }}>{v}</div>
+                    <div style={{ fontSize:6.5, color:textSub, marginTop:1, whiteSpace:"nowrap" }}>{l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* bio */}
+            <div style={{ marginBottom:8 }}>
+              <p style={{ fontSize:8.5, fontWeight:700, color:textMain, marginBottom:1 }}>ptrgama_</p>
+              <p style={{ fontSize:7.5, color:textSub, lineHeight:1.45 }}>IG Analyzer creator ✦</p>
+              <p style={{ fontSize:7.5, color:textSub, lineHeight:1.45 }}>Jakarta, Indonesia 🇮🇩</p>
+            </div>
+
+            {/* action buttons */}
+            <div style={{ display:"flex", gap:4, marginBottom:9 }}>
+              {[
+                { label:"Edit Profil", flex:2, accent:false },
+                { label:"Bagikan",     flex:2, accent:false },
+                { label:"＋",          flex:1, accent:false },
+              ].map(btn=>(
+                <button key={btn.label} style={{
+                  flex:btn.flex, height:22, borderRadius:6,
+                  background: dark?"rgba(255,255,255,0.1)":"rgba(0,0,0,0.06)",
+                  border:`1px solid ${divider}`,
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  fontSize:7.5, fontWeight:600, color:textMain, cursor:"pointer",
+                }}>{btn.label}</button>
+              ))}
+            </div>
+
+            {/* highlights */}
+            <div style={{ display:"flex", gap:10, overflowX:"hidden" }}>
+              {[
+                { label:"Rekomendasi", color:"#3b82f6" },
+                { label:"Tutorial",   color:"#8b5cf6" },
+                { label:"Update",     color:"#ec4899" },
+              ].map((h,i)=>(
+                <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:3, flexShrink:0 }}>
                   <div style={{
-                    width: 42, height: 42, borderRadius: "50%", padding: 2,
-                    background: `linear-gradient(45deg, hsl(${i*70+200},70%,55%), hsl(${i*70+260},70%,60%))`,
+                    width:36, height:36, borderRadius:"50%", padding:2,
+                    background:`linear-gradient(135deg, ${h.color}, ${h.color}88)`,
                   }}>
-                    <div style={{ width: "100%", height: "100%", borderRadius: "50%", background: screenBg, border: `1.5px solid ${screenBg}`, overflow: "hidden" }}>
-                      <div style={{ width: "100%", height: "100%", background: `hsl(${i*40+210},25%,${dark?15:90}%)` }} />
-                    </div>
+                    <div style={{ width:"100%", height:"100%", borderRadius:"50%", background: dark?"#1c1c1e":"#f2f2f7", border:`1.5px solid ${screenBg}` }}/>
                   </div>
-                  <span style={{ fontSize: 7, color: textSub }}>{name}</span>
+                  <span style={{ fontSize:6.5, color:textSub, whiteSpace:"nowrap" }}>{h.label}</span>
                 </div>
               ))}
-            </div>
-
-            {/* post header */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 12px 7px", flexShrink: 0 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                <div style={{ width: 26, height: 26, borderRadius: "50%", padding: 1.5, background: `linear-gradient(45deg, ${accentCol}, #af52de)` }}>
-                  <div style={{ width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden", border: `1.5px solid ${screenBg}` }}>
-                    {PROFILE_IMAGE
-                      ? <img src={PROFILE_IMAGE} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                      : <div style={{ width: "100%", height: "100%", background: dark ? "#1c1c1e" : "#f2f2f7" }} />}
-                  </div>
-                </div>
-                <div>
-                  <p style={{ fontSize: 8, fontWeight: 600, color: textMain }}>ptrgama_</p>
-                  <p style={{ fontSize: 6.5, color: textSub }}>Jakarta, ID</p>
-                </div>
-              </div>
-              <span style={{ color: textSub, fontSize: 14, letterSpacing: 1 }}>···</span>
-            </div>
-
-            {/* post image */}
-            <div style={{
-              width: "100%", height: 150, flexShrink: 0,
-              background: dark ? "#111" : "#f0f4ff",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              position: "relative", overflow: "hidden",
-            }}>
-              <IDALogo size={36} />
-            </div>
-
-            {/* actions */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 12px 4px", flexShrink: 0 }}>
-              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                <button onClick={() => setLiked(l => !l)} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 17, lineHeight: 1 }}>
-                  {liked ? "❤️" : <span style={{ color: textMain, fontSize: 17 }}>♡</span>}
-                </button>
-                <span style={{ fontSize: 15, color: textMain }}>💬</span>
-                <span style={{ fontSize: 15, color: textMain }}>✈️</span>
-              </div>
-              <button onClick={() => setSaved(s => !s)} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 15 }}>
-                {saved ? "🔖" : <span style={{ color: textMain }}>🏷️</span>}
-              </button>
-            </div>
-
-            {/* caption */}
-            <div style={{ padding: "0 12px 6px", flexShrink: 0 }}>
-              <p style={{ fontSize: 8, fontWeight: 600, color: textMain, marginBottom: 2 }}>
-                {liked ? "1,234" : "1,233"} suka
-              </p>
-              <p style={{ fontSize: 8, color: textSub, lineHeight: 1.5 }}>
-                <span style={{ fontWeight: 600, color: textMain }}>ptrgama_ </span>
-                IG Analyzer creator ✦
-              </p>
-            </div>
-
-            {/* profile section */}
-            <div style={{ flexShrink: 0, borderTop: `0.5px solid ${divider}`, padding: "10px 12px 0" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 7 }}>
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:3, flexShrink:0 }}>
                 <div style={{
-                  width: 52, height: 52, borderRadius: "50%", padding: 2,
-                  background: `linear-gradient(45deg, ${accentCol}, #af52de)`, flexShrink: 0,
+                  width:36, height:36, borderRadius:"50%",
+                  border:`1px dashed ${divider}`,
+                  display:"flex", alignItems:"center", justifyContent:"center",
                 }}>
-                  <div style={{ width: "100%", height: "100%", borderRadius: "50%", border: `2px solid ${screenBg}`, overflow: "hidden" }}>
-                    {PROFILE_IMAGE
-                      ? <img src={PROFILE_IMAGE} alt="profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                      : <span style={{ fontSize: 20, display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>👤</span>}
-                  </div>
+                  <span style={{ fontSize:14, color:textSub, lineHeight:1 }}>+</span>
                 </div>
-                <div style={{ display: "flex", gap: 8, flex: 1, justifyContent: "space-around" }}>
-                  {[["0","Posting"],["666","Followers"],["1","Following"]].map(([v, l]) => (
-                    <div key={l} style={{ textAlign: "center" }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: textMain }}>{v}</div>
-                      <div style={{ fontSize: 6.5, color: textSub, marginTop: 1 }}>{l}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{ display: "flex", gap: 4, marginBottom: 7 }}>
-                <a href={IG_LINK} target="_blank" rel="noopener noreferrer" style={{
-                  flex: 1, height: 22, borderRadius: 6,
-                  background: accentCol,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 8, fontWeight: 700, color: "#fff", textDecoration: "none",
-                }}>Ikuti</a>
-                <a href={IG_LINK} target="_blank" rel="noopener noreferrer" style={{
-                  flex: 1, height: 22, borderRadius: 6,
-                  border: `1px solid ${divider}`,
-                  background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 8, color: textMain, textDecoration: "none",
-                }}>Pesan</a>
-              </div>
-
-              {/* tab icons */}
-              <div style={{ display: "flex", borderTop: `0.5px solid ${divider}`, marginBottom: 4 }}>
-                {["⊞", "▷", "🏷"].map((ic, i) => (
-                  <button key={i} onClick={() => setTab(["grid","reels","tagged"][i])}
-                    style={{
-                      flex: 1, padding: "6px 0", display: "flex", justifyContent: "center",
-                      background: "none", border: "none", cursor: "pointer", fontSize: 11,
-                      color: tab === ["grid","reels","tagged"][i] ? accentCol : textSub,
-                      borderTop: tab === ["grid","reels","tagged"][i] ? `1px solid ${accentCol}` : "1px solid transparent",
-                    }}>
-                    {ic}
-                  </button>
-                ))}
-              </div>
-
-              {/* grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 1.5, marginBottom: 4 }}>
-                {gridTiles.map((bg, i) => (
-                  <div key={i} style={{ aspectRatio: "1", borderRadius: 2, background: bg }} />
-                ))}
-              </div>
-            </div>
-
-            {/* bottom nav */}
-            <div style={{
-              display: "flex", alignItems: "center", justifyContent: "space-around",
-              padding: "7px 0 13px",
-              background: screenBg,
-              borderTop: `0.5px solid ${divider}`,
-              flexShrink: 0, marginTop: "auto",
-            }}>
-              {["🏠","🔍","⊕","▷"].map((ic, i) => (
-                <span key={i} style={{ fontSize: 14, color: i === 0 ? accentCol : textSub }}>{ic}</span>
-              ))}
-              <div style={{ width: 22, height: 22, borderRadius: "50%", border: `2px solid ${i => i === 0 ? accentCol : "transparent"}`, overflow: "hidden" }}>
-                {PROFILE_IMAGE
-                  ? <img src={PROFILE_IMAGE} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  : <div style={{ width: "100%", height: "100%", background: dark ? "#2c2c2e" : "#e5e5ea" }} />}
+                <span style={{ fontSize:6.5, color:textSub }}>Baru</span>
               </div>
             </div>
           </div>
+
+          {/* ── CONTENT TABS ── */}
+          <div style={{ display:"flex", borderTop:`0.5px solid ${divider}`, borderBottom:`0.5px solid ${divider}`, flexShrink:0 }}>
+            {["grid","reels","tagged"].map(t=>(
+              <button key={t} onClick={()=>setTab(t)} style={{
+                flex:1, padding:"7px 0", display:"flex", justifyContent:"center", alignItems:"center",
+                background:"none", border:"none", cursor:"pointer",
+                borderTop: tab===t ? `1.5px solid ${textMain}` : "1.5px solid transparent",
+              }}>
+                <TabIcon type={t} active={tab===t}/>
+              </button>
+            ))}
+          </div>
+
+          {/* ── PHOTO GRID ── */}
+          <div style={{ flex:1, display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:1.5, padding:0, overflow:"hidden", alignContent:"start" }}>
+            {gridTiles.map((tile,i)=>(
+              <div key={i} style={{
+                aspectRatio:"1", background:tile.bg,
+                display:"flex", alignItems:"center", justifyContent:"center",
+              }}>
+                {i===0 && (
+                  <div style={{ width:18, height:18, borderRadius:4, background:"rgba(255,255,255,0.15)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                    <IDALogo size={12}/>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* ── BOTTOM NAV ── */}
+          <div style={{
+            display:"flex", alignItems:"center", justifyContent:"space-around",
+            padding:"8px 12px 14px",
+            background: screenBg,
+            borderTop:`0.5px solid ${divider}`,
+            flexShrink:0,
+          }}>
+            {[
+              { type:"home",    active:false },
+              { type:"search",  active:false },
+              { type:"plus",    active:false },
+              { type:"reels",   active:false },
+              { type:"profile", active:true  },
+            ].map((item,i)=>(
+              <div key={i} style={{ display:"flex", alignItems:"center", justifyContent:"center", width:28, height:28 }}>
+                <NavIcon type={item.type} active={item.active}/>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
     </div>
