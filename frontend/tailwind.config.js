@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -7,31 +8,37 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans:    ["'Rajdhani'", "system-ui", "sans-serif"],
-        display: ["'Orbitron'", "monospace"],
-        mono:    ["'JetBrains Mono'", "monospace"],
+        sans: ["'Inter'", "-apple-system", "BlinkMacSystemFont", "'SF Pro Display'", "sans-serif"],
       },
       colors: {
-        cyber: {
-          deep:    "#05081F",
-          navy:    "#0B1E5B",
-          cyan:    "#00CFFF",
-          blue:    "#38B6FF",
-          purple:  "#7B2CFF",
-          white:   "#FFFFFF",
-          muted:   "#9AA4C7",
-          green:   "#00FF8C",
-          panel:   "#080D2A",
+        apple: {
+          blue:   "#0071e3",
+          green:  "#34c759",
+          red:    "#ff3b30",
+          orange: "#ff9500",
+          purple: "#af52de",
+          pink:   "#ff2d55",
+          teal:   "#5ac8fa",
+          gray1:  "#8e8e93",
+          gray2:  "#aeaeb2",
+          gray3:  "#c7c7cc",
+          gray4:  "#d1d1d6",
+          gray5:  "#e5e5ea",
+          gray6:  "#f2f2f7",
         },
       },
-      boxShadow: {
-        "neon-cyan":   "0 0 20px rgba(0,207,255,0.5), 0 0 40px rgba(0,207,255,0.2)",
-        "neon-purple": "0 0 20px rgba(123,44,255,0.5), 0 0 40px rgba(123,44,255,0.2)",
-        "neon-green":  "0 0 12px rgba(0,255,140,0.5)",
+      borderRadius: {
+        'apple-sm': '8px',
+        'apple-md': '12px',
+        'apple-lg': '18px',
+        'apple-xl': '22px',
       },
       animation: {
-        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
-        "neon-border": "neon-border 3s ease-in-out infinite",
+        'fade-up': 'fade-up 0.4s ease forwards',
+        'fade-in': 'fade-in 0.3s ease forwards',
+      },
+      backdropBlur: {
+        'apple': '20px',
       },
     },
   },
