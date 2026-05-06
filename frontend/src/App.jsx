@@ -33,27 +33,11 @@ function useDarkMode() {
 /* ── LOGO ── */
 function IDALogo({ size = 28 }) {
   return (
-    <div
-      style={{
-        width: size,
-        height: size,
-        borderRadius: Math.round(size * 0.25),
-        background: "var(--accent)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-      }}
-    >
-      <svg width={size * 0.58} height={size * 0.58} viewBox="0 0 16 16" fill="none">
-        <circle cx="8" cy="8" r="5.5" stroke="rgba(255,255,255,0.9)" strokeWidth="1.3"/>
-        <circle cx="8" cy="8" r="2" fill="white"/>
-        <line x1="8" y1="2.5" x2="8" y2="4.5" stroke="rgba(255,255,255,0.5)" strokeWidth="1" strokeLinecap="round"/>
-        <line x1="8" y1="11.5" x2="8" y2="13.5" stroke="rgba(255,255,255,0.5)" strokeWidth="1" strokeLinecap="round"/>
-        <line x1="2.5" y1="8" x2="4.5" y2="8" stroke="rgba(255,255,255,0.5)" strokeWidth="1" strokeLinecap="round"/>
-        <line x1="11.5" y1="8" x2="13.5" y2="8" stroke="rgba(255,255,255,0.5)" strokeWidth="1" strokeLinecap="round"/>
-      </svg>
-    </div>
+    <img
+      src="/favicon.png"
+      alt="IG Analyzer"
+      style={{ width: size, height: size, objectFit: "contain", flexShrink: 0, display: "block" }}
+    />
   );
 }
 
@@ -676,10 +660,10 @@ export default function App() {
             <IDALogo size={30} />
             <div className="flex flex-col">
               <span className="text-base font-bold tracking-tight leading-none" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-                IG Analyzer
+                Your Instagram
               </span>
               <span style={{ fontSize: 10, color: "var(--text-tertiary)", letterSpacing: "0.02em" }}>
-                Dashboard v1.0
+                Account Analyzer
               </span>
             </div>
           </div>
